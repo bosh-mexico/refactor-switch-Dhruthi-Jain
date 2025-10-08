@@ -18,3 +18,17 @@ void checkoutWithMock(PaymentMode mode, double amount, MockPayment& mock) {
         mock.creditCard(amount);
     }
 }
+
+TEST(CheckoutTest, CallsCorrectPaymentFunction) {
+    MockPayment mock;
+
+    EXPECT_CALL(mock, payPal(150.0)).Times(1);
+    EXPECT_CALL(mock, googlePay(150.0)).Times(1);
+    EXPECT_CALL(mock, creditCard(150.0)).Times(1);
+
+checkoutWithMock(PaymentMode::PAYPAL, 150.0, mock);
+checkoutWithMock(PaymentMode::GOOGLEPAY, 150.0, mock);
+checkoutWithMock(PaymentMode::CREDITCARD, 150.0, mock);
+checkoutWithMock(PaymentMode::UNKNOWN, 150.0, mock);
+}
+
